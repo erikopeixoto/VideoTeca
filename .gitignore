@@ -8,7 +8,7 @@
 /bazel-out
 
 # dependencies
-scr/VideoTeca-Angular/node_modules
+VideoTeca-Angular/node_modules
 scr/VideoTeca.AcessoDados/bin
 scr/VideoTeca.AcessoDados/obj
 scr/VideoTeca.Modelos/bin
@@ -55,4 +55,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-scr/VideoTeca-Angular/package-lock.json
+VideoTeca-Angular/package-lock.json
