@@ -30,7 +30,7 @@ namespace VideoTeca.Servicos.Servicos
         }
         public async Task<TipoMidia> Alterar(TipoMidia tipoMidia)
         {
-            return await repositorio.Alterar(tipoMidia.Id, tipoMidia);
+            return await repositorio.Alterar(tipoMidia);
         }
         public async Task<TipoMidia> Excluir(int id)
         {

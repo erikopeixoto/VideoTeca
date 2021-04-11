@@ -87,7 +87,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       this.catalogoFiltrados = [];
       this.dataSource = undefined;
       this.catalogoService.pesquisar(filtro).then((lista) => {
-        if (!Util.isNullOrEmpty(lista[0].foneFormatado)) {
+        if (lista.length > 0 ) {
             this.catalogoFiltrados = lista;
             this.dataSource = new MatTableDataSource(this.catalogoFiltrados);  
             this.dataSource.paginator = this.paginator;
@@ -145,7 +145,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
 
     if (Util.isNullOrEmpty(this.filtroListagem.controls['titulo'].value) &&
         Util.isNullOrEmpty(this.filtroListagem.controls['nomeAutor'].value) &&
-        Number(Util.isNullOrEmpty(this.filtroListagem.controls['idGenero'].value)) === 0) {
+        Number(this.filtroListagem.controls['idGenero'].value) === 0) {
           retorno = false;
           this.messagingService.message.emit(new ModalMessage('Aviso', 
           'Informe pelo menos um filtro de pesquisa.', 0, 'warning'));

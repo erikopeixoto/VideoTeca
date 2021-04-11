@@ -48,24 +48,24 @@ export class AppComponent {
     this.showingMessage = true;
     const { title, message, type } = Message;
     let cor = 'color: warn';
-    let corTitulo = 'color: warn; height: 5%';
+    let corTitulo = 'color: warn;height: 5%';
     switch (type)
     {
       case 'danger':
         cor = 'color: red';
-        corTitulo = 'color: red; height: 5%!important';
+        corTitulo = 'color: red;height: 5%!important';
         break;
       case 'warning':
         cor = 'color: blue';
-        corTitulo = 'color: blue; height: 5%!important';
+        corTitulo = 'color: blue;height: 5%!important';
         break;
       case 'info':
         cor = 'color: yellow';
-        corTitulo = 'color: yellow; height: 5%!important';
+        corTitulo = 'color: yellow;height: 5%!important';
         break;
       case 'success':
         cor = 'color: green';
-        corTitulo = 'color: green; height: 5%!important';
+        corTitulo = 'color: green;height: 5%!important';
         break;
     }
 

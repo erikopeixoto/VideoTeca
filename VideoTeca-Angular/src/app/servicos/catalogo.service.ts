@@ -4,7 +4,6 @@ import { BaseService } from './base.service';
 import { GenericHttpService } from './generic.service';
 import { CatalogoDto } from '../dtos/catalogo-dto';
 import { FiltroCatalogoDto } from '../dtos/filtro-catalogo-dto';
-
 @Injectable({
   providedIn: 'root'
 })

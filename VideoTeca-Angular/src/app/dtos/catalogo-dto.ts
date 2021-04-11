@@ -1,6 +1,7 @@
 export interface CatalogoDto{
-  Titulo: string;
-  NomeAutor: string;
+  desTitulo: string;
+  NomAutor: string;
   IdGenero: string;
   codigo: string;
+  desGenero: string;
 }

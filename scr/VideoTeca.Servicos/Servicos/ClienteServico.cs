@@ -47,7 +47,7 @@ namespace VideoTeca.Servicos.Servicos
             {
                 throw new ArgumentException("CPF/CNPJ existe.");
             }
-            return _map.Map<ClienteDto>(await _repositorio.Alterar(cliente.Id, cliente));
+            return _map.Map<ClienteDto>(await _repositorio.Alterar(cliente));
         }
         public async Task<ClienteDto> Excluir(int id)
         {

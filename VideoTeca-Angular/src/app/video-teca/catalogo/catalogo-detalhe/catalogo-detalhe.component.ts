@@ -1,44 +1,51 @@
 import { Event, Router } from '@angular/router';
-import { Component,
+import { Component, AfterViewInit,
          OnInit, Input, Output, EventEmitter , ChangeDetectionStrategy, ViewChild, resolveForwardRef,
 } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ModalComponent } from '../../../shared/modal/modal.component';
 
 import { CatalogoService } from '../../../servicos/catalogo.service';
 import { Alerta } from '../../../shared/modelos/alerta';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertaComponent } from '../../../shared/components/alerta/alerta.component';
-import { CatalogoDto } from '../../../dtos/catalogo-dto';
+import { CatalogoTipoMidia } from '../../../modelos/catalogo-tipo-midia';
 import { Catalogo } from '../../../modelos/catalogo';
 import { Util } from '../../../utils/util';
 import { MaskManager } from '../../../utils/mask-manager';
 import { InputTextComponent } from '../../../shared/components/campos/input-text/input-text.component';
-import { CNPJCPFValidator } from '../../../utils/cnpj-cpf-validator';
-import { GenericoValidator} from '../../../utils/generico-validator';
-
 @Component({
   selector: 'app-catalogo-detalhe',
   templateUrl: './catalogo-detalhe.component.html',
   styleUrls: ['./catalogo-detalhe.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogoDetalheComponent implements OnInit {
+export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
   @Input() modalParent: any;
   @Input() item: any;
   @Output() itemDestino = new EventEmitter();
 
+  displayedColumns: string[] = [ 'id' , 'tipomidia', 'quantidade', 'acoes'];
+  dataSource: MatTableDataSource<CatalogoTipoMidia>;
+
+  @ViewChild('modalCatalogoTipoMidia', {static: true} ) modalCatalogoTipoMidia: ModalComponent;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+  get getVisibleCatalogoDetalhe(): boolean {
+    return this.modalCatalogoTipoMidia.getVisible();
+  }
+
   public catalogo: Catalogo;
   public id: number;
-  public catalogoDto: CatalogoDto;
   public formCatalogo: FormGroup;
   public operacao: string;
   public maskManager: MaskManager;
   public pai: CatalogoDetalheComponent;
   public cargaDados: boolean;
-  public readonly tipoPessoas = [
-    { id: 1, descricao: 'F�sica' },
-    { id: 2, descricao: 'Jur�dica' }
-  ];
 
   constructor(
     public catalogoService: CatalogoService,
@@ -50,42 +57,46 @@ export class CatalogoDetalheComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargaDados = true;
+    this.cargaDados = false;
     this.formCatalogo = this.fb.group({
-      tipoPessoa: [1 , Validators.required],
-      nomCatalogo: ['', Validators.required],
-      numDocumento: ['', [Validators.required, Validators.minLength(11), CNPJCPFValidator.validaCNPJCPF.bind(this)]],
-      numTelefone: ['', [Validators.required, Validators.minLength(11)]],
+      codigo: ['' ,[Validators.required, Validators.maxLength(5)]],
+      idGenero: ['', Validators.required],
+      nomAutor: ['', [Validators.required, Validators.minLength(10)]],
+      desTitulo: ['', [Validators.required, Validators.minLength(5)]],
       id: [],
-      desBairro: ['', Validators.required],
-      desLogradouro: ['', Validators.required],
-      desMunicipio: ['', Validators.required],
-      desComplemento: [''],
-      numEndereco: ['', Validators.required],
-      dtcNascimento: ['', Validators.required],
-      numCep: ['', GenericoValidator.validarData.bind(this)]
+      dtcAtualizacao: [],
+      catalogoTipoMidias: [''],
+      anoLancamento: ['', Validators.required]
     });
 
     if (this.catalogoService.id) {
       this.operacao = 'Confirma a alteração?';
       this.id = this.catalogoService.id;
-      this.telefoneExistente();
-      this.cargaDados = false;
+      this.cargaDados = true;
     } else {
       this.operacao = 'Confirma a inclusão?';
     }
   }
 
-  async telefoneExistente(): Promise<boolean> {
-    await this.carregar();
-    return true;
+  ngAfterViewInit(): void{
+    this.dataSource = new MatTableDataSource();  
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+   if (this.cargaDados) {
+      this.carregar();
+    }
   }
 
   carregar(): Promise<boolean> {
-   return new Promise((resolve) => {this.catalogoService.buscar(this.id ).then((lista) => {
-      if (! Util.isNullOrEmpty(lista)) {
-        this.formCatalogo.setValue(lista); 
-        }
+   return new Promise((resolve) => {this.catalogoService.buscar(this.id ).then((catalogo: Catalogo) => {
+      if (! Util.isNullOrEmpty(catalogo)) {
+        this.formCatalogo.setValue(catalogo); 
+        this.dataSource = new MatTableDataSource(catalogo.catalogoTipoMidias);  
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator.firstPage();
+        this.formCatalogo.updateValueAndValidity();
+       }
       });
     });
   }
@@ -117,6 +128,7 @@ export class CatalogoDetalheComponent implements OnInit {
   incluir(): void {
     this.catalogo = this.formCatalogo.getRawValue() as Catalogo;
     this.catalogo.id = 0;
+    this.catalogo.catalogoTipoMidias = this.dataSource.data;
     this.catalogoService.incluir(this.catalogo).then(() => {
       this.modalParent.pesquisar();
       this.modalParent.modalDetalheCatalogo.closeModal();
@@ -125,10 +137,16 @@ export class CatalogoDetalheComponent implements OnInit {
 
   alterar(): void {
     this.catalogo = this.formCatalogo.getRawValue() as Catalogo;
+    this.catalogo.catalogoTipoMidias = this.dataSource.data;
     this.catalogoService.alterar(this.catalogo).then(() => {
       this.modalParent.pesquisar();
       this.modalParent.modalDetalheCatalogo.closeModal();
     });
+  }
+
+  incluirMidia(): void {
+    this.modalCatalogoTipoMidia.title = 'Inclusão';
+    this.modalCatalogoTipoMidia.showModal();
   }
 
   fechar(): void {

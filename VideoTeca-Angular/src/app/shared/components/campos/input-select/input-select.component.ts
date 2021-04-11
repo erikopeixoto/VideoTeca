@@ -4,7 +4,6 @@ import { Component,
          ChangeDetectorRef } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { ValidarCamposService } from '../validar-campos.service';
-
 @Component({
   selector: 'app-input-select',
   templateUrl: './input-select.component.html',
@@ -21,12 +20,14 @@ export class InputSelectComponent {
   @Input() isMultiple: boolean;
   @Input() ngChange;
   @Input() pai;
+  @Input() texto;
 
   constructor(public validacao: ValidarCamposService,
               private readonly changeDetectorRef: ChangeDetectorRef) {
     this.isDisabled = false;
     this.ngChange = '';
     this.isMultiple = false;
+    this.texto = '';
    }
 
   get formControl(): AbstractControl {

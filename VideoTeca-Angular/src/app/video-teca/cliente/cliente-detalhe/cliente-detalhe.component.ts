@@ -95,8 +95,8 @@ export class ClienteDetalheComponent implements OnInit {
    return new Promise((resolve) => {this.clienteService.buscar(this.id ).then((lista) => {
       if (! Util.isNullOrEmpty(lista)) {
         this.formCliente.setValue(lista); 
-        }
-      });
+      }
+     });
     });
   }
 

@@ -1,8 +1,11 @@
+import { CatalogoTipoMidia } from './catalogo-tipo-midia';
 export class Catalogo{
   id: number;
   idGenero: number;
-  desCatalogo: string;
+  desTitulo: string;
   nomAutor: string;
   anoLancamento: string;
   codigo: string;
+
+  catalogoTipoMidias: CatalogoTipoMidia[];
 }

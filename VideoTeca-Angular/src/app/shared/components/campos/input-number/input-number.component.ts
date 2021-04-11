@@ -17,6 +17,7 @@ export class InputNumberComponent {
   @Input() step = 1;
   @Input() class: string;
   @Input() style: string;
+  @Input() pai;
 
   constructor(public validacao: ValidarCamposService) { }
 

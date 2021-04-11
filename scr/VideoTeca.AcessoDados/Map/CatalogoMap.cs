@@ -8,7 +8,7 @@ namespace VideoTeca.AcessoDados.Map
     {
         public void Configure(EntityTypeBuilder<Catalogo> builder)
         {
-            builder.ToTable("catalogo", "dbo").HasKey(t => t.Id);
+            builder.ToTable("catalogo").HasKey(t => t.Id);
 
             builder.Property(t => t.Id).HasColumnName("id").IsRequired(true);
             builder.Property(t => t.Codigo).HasColumnName("cod_catalogo").IsRequired(true);

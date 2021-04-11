@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[Catalogo]
 (
 	[Id] INT NOT NULL IDENTITY, 
     [cod_catalogo] VARCHAR(5) NOT NULL, 
-    [id_genero] VARCHAR(50) NOT NULL, 
+    [id_genero] INT NOT NULL, 
     [des_titulo] VARCHAR(100) NULL, 
     [nom_autor] VARCHAR(100) NULL, 
     [ano_lancamento] VARCHAR(4) NULL, 

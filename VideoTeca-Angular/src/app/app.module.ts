@@ -25,6 +25,7 @@ import { GeneroDetalheComponent } from './video-teca/genero/genero-detalhe/gener
 import { TipoMidiaDetalheComponent } from './video-teca/tipo-midia/tipo-midia-detalhe/tipo-midia-detalhe.component';
 import { CatalogoComponent } from './video-teca/catalogo/catalogo.component';
 import { CatalogoDetalheComponent } from './video-teca/catalogo/catalogo-detalhe/catalogo-detalhe.component';
+import { CatalogoTipoMidiaComponent } from './video-teca/catalogo/catalogo-detalhe/catalogo-tipo-midia/catalogo-tipo-midia.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { CatalogoDetalheComponent } from './video-teca/catalogo/catalogo-detalhe
     TipoMidiaComponent,
     TipoMidiaDetalheComponent,
     CatalogoComponent,
-    CatalogoDetalheComponent
+    CatalogoDetalheComponent,
+    CatalogoTipoMidiaComponent
   ],
   imports: [
     BrowserModule,

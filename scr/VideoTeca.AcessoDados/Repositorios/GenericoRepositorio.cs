@@ -37,7 +37,7 @@ namespace VideoTeca.AcessoDados.Repositorios
             var entity = await dbSet.AsNoTracking<T>().Where<T>(where).ToListAsync<T>();
             return entity;
         }
-        public virtual async Task<T> Alterar(long id, T entity)
+        public virtual async Task<T> Alterar(T entity)
         {
             try
             {

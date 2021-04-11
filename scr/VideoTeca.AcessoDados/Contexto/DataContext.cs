@@ -14,6 +14,7 @@ namespace VideoTeca.AcessoDados.Contexto
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Genero> Generos { get; set; }
         public DbSet<TipoMidia> TipoMidias { get; set; }
+        public DbSet<CatalogoTipoMidia> CatalogoTipoMidias { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             try
@@ -22,6 +23,7 @@ namespace VideoTeca.AcessoDados.Contexto
                 modelBuilder.ApplyConfiguration(new GeneroMap());
                 modelBuilder.ApplyConfiguration(new TipoMidiaMap());
                 modelBuilder.ApplyConfiguration(new CatalogoMap());
+                modelBuilder.ApplyConfiguration(new CatalogoTipoMidiaMap());
                 base.OnModelCreating(modelBuilder);
             }
             catch (Exception ex)

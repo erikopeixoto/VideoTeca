@@ -18,6 +18,7 @@ namespace VideoTeca.Servicos.Servicos
     {
         private readonly CatalogoRepositorio _repositorio;
         private readonly IMapper _map;
+        private readonly DataContext _contexto;
         public CatalogoServico()
         {
 
@@ -26,6 +27,7 @@ namespace VideoTeca.Servicos.Servicos
         {
             _repositorio = new CatalogoRepositorio(contexto);
             _map = mapper;
+            _contexto = contexto;
         }
 
         public async Task<CatalogoDto> Incluir(Catalogo catalogo)
@@ -36,7 +38,7 @@ namespace VideoTeca.Servicos.Servicos
                 throw new ArgumentException("Código já existe.");
             }
             CatalogoDto catalogoDto = new CatalogoDto();
-            catalogoDto = _map.Map<CatalogoDto>(await _repositorio.Incluir(catalogo));
+            catalogoDto = _map.Map<CatalogoDto>(await _repositorio.Alterar(catalogo));
 
             return catalogoDto;
         }
@@ -47,7 +49,7 @@ namespace VideoTeca.Servicos.Servicos
             {
                 throw new ArgumentException("Código já existe.");
             }
-            return _map.Map<CatalogoDto>(await _repositorio.Alterar(catalogo.Id, catalogo));
+            return _map.Map<CatalogoDto>(await _repositorio.Alterar(catalogo));
         }
         public async Task<CatalogoDto> Excluir(int id)
         {
@@ -61,6 +63,7 @@ namespace VideoTeca.Servicos.Servicos
         {
             List<Catalogo> catalogo = await _repositorio.Listar();
             List<CatalogoDto> catalogoDto = _map.Map<List<CatalogoDto>>(catalogo);
+            buscarGenero(catalogoDto);
             return catalogoDto;
         }
         public async Task<Catalogo> BuscarId(int id)
@@ -81,18 +84,19 @@ namespace VideoTeca.Servicos.Servicos
             {
                 where = Util.ExpressionCombiner.And<Catalogo>(where, c => c.DesTitulo.Contains(filtro.Titulo));
             }
-            if (! string.IsNullOrEmpty(filtro.IdGenero))
+            if (! string.IsNullOrEmpty(filtro.IdGenero) && filtro.IdGenero != "0")
             {
-                byte idGenero = Convert.ToByte(filtro.IdGenero);
+                int idGenero = Convert.ToInt32(filtro.IdGenero);
                 where = Util.ExpressionCombiner.And<Catalogo>(where, c => c.IdGenero == idGenero || idGenero == 0);
             }
             if (! string.IsNullOrEmpty(filtro.NomeAutor))
             {
-                where = Util.ExpressionCombiner.And<Catalogo>(where, c => c.NomAutor == filtro.NomeAutor);
+                where = Util.ExpressionCombiner.And<Catalogo>(where, c => c.NomAutor.Contains(filtro.NomeAutor));
             }
 
             List<Catalogo> catalogo = await _repositorio.Listar(where);
             List<CatalogoDto> catalogoDto = _map.Map<List<CatalogoDto>>(catalogo);
+            buscarGenero(catalogoDto);
             return catalogoDto;
         }
         public void Dispose()
@@ -101,7 +105,7 @@ namespace VideoTeca.Servicos.Servicos
         }
         private void ValidarCatalogo(Catalogo catalogo)
         {
-            string retorno = CatalogoValidar.ValidarCatalogo(catalogo);
+            string retorno = CatalogoValidar.ValidarCatalogo(catalogo, _contexto);
             if (!string.IsNullOrEmpty(retorno))
             {
                 throw new ArgumentException(retorno);
@@ -117,12 +121,20 @@ namespace VideoTeca.Servicos.Servicos
         public Catalogo TesteCatalogo(Catalogo catalogo)
         {
             Catalogo retorno = new Catalogo();
-            string validar = CatalogoValidar.ValidarCatalogo(catalogo);
+            string validar = CatalogoValidar.ValidarCatalogo(catalogo, _contexto);
             if (string.IsNullOrEmpty(validar))
             {
                 retorno = catalogo;
             }
             return retorno;
+        }
+        private void buscarGenero(List<CatalogoDto> catalogoDto)
+        {
+            GeneroServico _genero = new GeneroServico(_contexto);
+            foreach (var item in catalogoDto)
+            {
+                item.DesGenero = _genero.BuscarId(item.IdGenero)?.Result.Descricao;
+            }
         }
 
     }

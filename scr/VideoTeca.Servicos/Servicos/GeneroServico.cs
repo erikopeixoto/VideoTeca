@@ -13,39 +13,39 @@ namespace VideoTeca.Servicos.Servicos
 { 
     public class GeneroServico : IModeloCRUDInterface<Genero, Genero>
     {
-        private readonly GeneroRepositorio repositorio;
+        private readonly GeneroRepositorio _repositorio;
         public GeneroServico()
         {
         }
         public GeneroServico(DataContext contexto)
         {
-            repositorio = new GeneroRepositorio(contexto);
+            _repositorio = new GeneroRepositorio(contexto);
         }
 
         public async Task<Genero> Incluir(Genero genero)
         {
             this.ValidarGenero(genero);
-            return await repositorio.Incluir(genero);
+            return await _repositorio.Incluir(genero);
         }
         public async Task<Genero> Alterar(Genero genero)
         {
-            return await repositorio.Alterar(genero.Id, genero);
+            return await _repositorio.Alterar(genero);
         }
         public async Task<Genero> Excluir(int id)
         {
-            return await repositorio.Excluir(id);
+            return await _repositorio.Excluir(id);
         }
         public async Task<List<Genero>> Listar()
         {            
-            return await repositorio.Listar();
+            return await _repositorio.Listar();
         }
         public async Task<Genero> BuscarId(int id)
         {
-            return await repositorio.BuscarId(id); ;
+            return await _repositorio.BuscarId(id); ;
         }
         public bool Existe(int id)
         {
-            return repositorio.Existe(id);
+            return _repositorio.Existe(id);
         }
         private void ValidarGenero(Genero genero)
         {

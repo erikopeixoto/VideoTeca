@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using VideoTeca.Modelos.Modelos;
 using VideoTeca.AcessoDados.Contexto;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace VideoTeca.AcessoDados.Repositorios
 {
@@ -13,6 +15,29 @@ namespace VideoTeca.AcessoDados.Repositorios
         public CatalogoRepositorio(DataContext contexto) : base(contexto)
         {
             _contexto = contexto;
+        }
+        public override async Task<Catalogo> BuscarId(int id)
+        {
+            Catalogo catalogo = await _contexto.Catalogos
+                                .Include(c => c.CatalogoTipoMidias)
+                                .FirstOrDefaultAsync(c => c.Id == id);
+
+            return catalogo;
+
+            /*
+            IQueryable<Property> query = DataContext.PropertyToLists.Where(x => x.Selected == true)
+                                        .Where(x => x.UserId == userId && x.ListId == listId)
+                                        // After identifying the relations that I need,
+                                        // I only need to property object "which is a virtual property in" the relation object
+                                        .Select(x => x.Property)
+                                        // Here I am including relations from the Property virtual property which are virtual properties
+                                        // on the Property
+                                        .Include(x => x.City)
+                                        .Include(x => x.Type)
+                                        .Include(x => x.Status);
+
+            List<Property> properties = await query.ToListAsync();
+            */
         }
         public bool ExisteCodigo(string codCodigo)
         {

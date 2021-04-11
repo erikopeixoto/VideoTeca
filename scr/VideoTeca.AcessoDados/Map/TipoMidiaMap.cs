@@ -15,6 +15,7 @@ namespace VideoTeca.AcessoDados.Map
             builder.Property(t => t.DtcAtualizacao).HasColumnName("dtc_atualizacao").IsRequired(false);
 
             builder.Ignore(t => t.Catalogos);
+            builder.Ignore(t => t.CatalogoTipoMidias);
         }
     }
 }
