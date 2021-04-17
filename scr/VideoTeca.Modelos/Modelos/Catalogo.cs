@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System;
+using VideoTeca.Modelos.Dtos;
 
 namespace VideoTeca.Modelos.Modelos
 {
@@ -17,5 +18,6 @@ namespace VideoTeca.Modelos.Modelos
         public string AnoLancamento { get; set; }
         public DateTime? DtcAtualizacao { get; set; }
         public List<CatalogoTipoMidia> CatalogoTipoMidias { get; set; }
+        public virtual List<CatalogoTipoMidiaDto> CatalogoTipoMidiasDto { get; set; }
     }
 }

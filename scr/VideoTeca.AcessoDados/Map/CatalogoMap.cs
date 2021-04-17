@@ -18,6 +18,7 @@ namespace VideoTeca.AcessoDados.Map
             builder.Property(t => t.AnoLancamento).HasColumnName("ano_lancamento").IsRequired(true);
             builder.Property(t => t.DtcAtualizacao).HasColumnName("dtc_atualizacao").IsRequired(true);
 
+            builder.Ignore(c => c.CatalogoTipoMidiasDto);
             // builder.HasData(new PhoneNumberType { PhoneNumberTypeID = 1, Name = "Local phone" });
             // builder.HasData(new PhoneNumberType { PhoneNumberTypeID = 2, Name = "Cellphone" });
 

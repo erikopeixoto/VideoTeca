@@ -19,7 +19,8 @@ namespace VideoTeca.AcessoDados.Repositorios
         public override async Task<Catalogo> BuscarId(int id)
         {
             Catalogo catalogo = await _contexto.Catalogos
-                                .Include(c => c.CatalogoTipoMidias)
+                                .AsNoTracking()
+                                .Include(c => c.CatalogoTipoMidias).ThenInclude(CatalogoTipoMidias => CatalogoTipoMidias.TipoMidia)
                                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return catalogo;

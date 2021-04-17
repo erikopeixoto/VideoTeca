@@ -16,9 +16,6 @@ namespace VideoTeca.AcessoDados.Map
             builder.Property(t => t.QtdTitulo).HasColumnName("qtd_titulo").IsRequired(true);
             builder.Property(t => t.DtcAtualizacao).HasColumnName("dtc_atualizacao").IsRequired(true);
 
-            builder.Ignore(t => t.Catalogo);
-            builder.Ignore(t => t.TipoMidia);
-
             builder.HasOne(c => c.Catalogo)
                    .WithMany(c => c.CatalogoTipoMidias)
                    .HasForeignKey(c => c.IdCatalogo);

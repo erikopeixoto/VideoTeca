@@ -44,12 +44,39 @@ namespace VideoTeca.Servicos.Servicos
         }
         public async Task<CatalogoDto> Alterar(Catalogo catalogo)
         {
+            CatalogoDto catalogoDto = new CatalogoDto();
+            List<CatalogoTipoMidia> catalogoTipoMidia;
             this.ValidarCatalogo(catalogo);
             if (_repositorio.ExisteCodigo(catalogo.Codigo, catalogo.Id))
             {
                 throw new ArgumentException("Código já existe.");
             }
-            return _map.Map<CatalogoDto>(await _repositorio.Alterar(catalogo));
+            using (var transaction = _contexto.Database.BeginTransaction())
+            {
+                try
+                {
+                    catalogoTipoMidia = await new CatalogoTipoMidiaServico(_contexto).Pesquisar(catalogo.Id);
+                    foreach (var item in catalogoTipoMidia)
+                    {
+                        if (! catalogo.CatalogoTipoMidias.Any(c => c.Id == item.Id))
+                        {
+                            await new CatalogoTipoMidiaServico(_contexto).Excluir(item.Id);
+                        }
+                    }
+                    catalogoDto = _map.Map<CatalogoDto>(await _repositorio.Alterar(catalogo));
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    if (transaction.TransactionId != null)
+                    {
+                        await transaction.RollbackAsync();
+                    }
+                    throw new ArgumentException("Existe(m) títulos alugados. Impossivel exluir.");
+                }
+
+            }
+            return catalogoDto;
         }
         public async Task<CatalogoDto> Excluir(int id)
         {
@@ -72,7 +99,12 @@ namespace VideoTeca.Servicos.Servicos
             {
                 throw new ArgumentException("Código inválido.");
             }
-            Catalogo catalogo = _map.Map<Catalogo>(await _repositorio.BuscarId(id));
+            Catalogo catalogo = await _repositorio.BuscarId(id);
+            catalogo.CatalogoTipoMidiasDto = _map.Map<List<CatalogoTipoMidiaDto>>(catalogo.CatalogoTipoMidias);
+            foreach (var item in catalogo.CatalogoTipoMidiasDto)
+            {
+                item.Descricao = new TipoMidiaServico(_contexto).BuscarId(item.IdTipoMidia)?.Result.Descricao;
+            }
             return catalogo;
         }
         public async Task<List<CatalogoDto>> Pesquisar(FiltroCatalogoDto filtro)

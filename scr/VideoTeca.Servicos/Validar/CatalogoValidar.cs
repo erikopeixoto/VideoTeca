@@ -36,7 +36,7 @@ namespace VideoTeca.Servicos.Validar
                     item.DtcAtualizacao = DateTime.Now;
                     _retorno = item switch
                     {
-                        _ when ! _tipoMidia.Existe(item.TipoMidiaId) => _retorno = "Tipo mídia inválido.",
+                        _ when ! _tipoMidia.Existe(item.IdTipoMidia) => _retorno = "Tipo mídia inválido.",
                         _ when item.QtdTitulo < 1 => _retorno = "Quantidade inválida.",
                         _ => ""
                     };
