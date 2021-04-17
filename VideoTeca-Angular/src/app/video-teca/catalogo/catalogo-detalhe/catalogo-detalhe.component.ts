@@ -13,6 +13,7 @@ import { Alerta } from '../../../shared/modelos/alerta';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertaComponent } from '../../../shared/components/alerta/alerta.component';
 import { CatalogoTipoMidia } from '../../../modelos/catalogo-tipo-midia';
+import { CatalogoTipoMidiaDto } from '../../../dtos/catalogo-tipo-midia-dto';
 import { Catalogo } from '../../../modelos/catalogo';
 import { Util } from '../../../utils/util';
 import { MaskManager } from '../../../utils/mask-manager';
@@ -29,7 +30,7 @@ export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
   @Output() itemDestino = new EventEmitter();
 
   displayedColumns: string[] = [ 'id' , 'tipomidia', 'quantidade', 'acoes'];
-  dataSource: MatTableDataSource<CatalogoTipoMidia>;
+  dataSource: MatTableDataSource<CatalogoTipoMidiaDto>;
 
   @ViewChild('modalCatalogoTipoMidia', {static: true} ) modalCatalogoTipoMidia: ModalComponent;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -46,6 +47,7 @@ export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
   public maskManager: MaskManager;
   public pai: CatalogoDetalheComponent;
   public cargaDados: boolean;
+  public catalogoTipoMidia: CatalogoTipoMidia;
 
   constructor(
     public catalogoService: CatalogoService,
@@ -66,6 +68,7 @@ export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
       id: [],
       dtcAtualizacao: [],
       catalogoTipoMidias: [''],
+      catalogoTipoMidiasDto: [''],
       anoLancamento: ['', Validators.required]
     });
 
@@ -91,7 +94,7 @@ export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
    return new Promise((resolve) => {this.catalogoService.buscar(this.id ).then((catalogo: Catalogo) => {
       if (! Util.isNullOrEmpty(catalogo)) {
         this.formCatalogo.setValue(catalogo); 
-        this.dataSource = new MatTableDataSource(catalogo.catalogoTipoMidias);  
+        this.dataSource = new MatTableDataSource(catalogo.catalogoTipoMidiasDto);  
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator.firstPage();
@@ -128,7 +131,7 @@ export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
   incluir(): void {
     this.catalogo = this.formCatalogo.getRawValue() as Catalogo;
     this.catalogo.id = 0;
-    this.catalogo.catalogoTipoMidias = this.dataSource.data;
+    this.catalogo.catalogoTipoMidiasDto = this.dataSource.data;
     this.catalogoService.incluir(this.catalogo).then(() => {
       this.modalParent.pesquisar();
       this.modalParent.modalDetalheCatalogo.closeModal();
@@ -137,18 +140,61 @@ export class CatalogoDetalheComponent implements OnInit, AfterViewInit {
 
   alterar(): void {
     this.catalogo = this.formCatalogo.getRawValue() as Catalogo;
-    this.catalogo.catalogoTipoMidias = this.dataSource.data;
+    this.atribuirTipoMidia(this.dataSource.data);
     this.catalogoService.alterar(this.catalogo).then(() => {
       this.modalParent.pesquisar();
       this.modalParent.modalDetalheCatalogo.closeModal();
     });
   }
 
+  atribuirTipoMidia(tipoMidia): void {
+    this.catalogo.catalogoTipoMidias = [];
+    tipoMidia.forEach(element => {
+      this.catalogoTipoMidia = new CatalogoTipoMidia();
+      this.catalogoTipoMidia.id = element.id;
+      this.catalogoTipoMidia.idCatalogo = element.idCatalogo;
+      this.catalogoTipoMidia.idTipoMidia = element.idTipoMidia;
+      this.catalogoTipoMidia.qtdTitulo = element.qtdTitulo;
+      this.catalogo.catalogoTipoMidias.push(this.catalogoTipoMidia);
+    });
+
+  }
+
   incluirMidia(): void {
+    this.catalogoService.catalogoTipoMidiaDto = null;
     this.modalCatalogoTipoMidia.title = 'Inclusão';
     this.modalCatalogoTipoMidia.showModal();
   }
 
+  editarMidia(item: CatalogoTipoMidiaDto): void {
+    this.catalogoService.catalogoTipoMidiaDto = item;
+    this.modalCatalogoTipoMidia.title = 'Alteração';
+    this.modalCatalogoTipoMidia.showModal();
+  }
+
+  excluirMidia(id: number): void {
+    const config = {
+      data: {
+        titulo: 'Confirmar',
+        descricao: 'Confirma a exclusão?',
+        btnSucesso: 'Ok',
+        corBtnSucesso: 'accent',
+        possuirBtnFechar: true
+      } as Alerta
+    };
+    const dialogRef = this.dialog.open(AlertaComponent, config);
+    dialogRef.afterClosed().subscribe((opcao: boolean) => {
+      if (opcao) {
+         if (! Util.isNullOrEmpty(id)) {
+            const data = this.dataSource.data;
+            let itemIndex = data.findIndex(item => item.id == id);
+            data.splice(itemIndex, 1);
+            this.dataSource.data = data;
+         }
+      }
+    });
+  }
+  
   fechar(): void {
     this.modalParent.modalDetalheCatalogo.closeModal();
   }

@@ -21,6 +21,7 @@ export class InputSelectComponent {
   @Input() ngChange;
   @Input() pai;
   @Input() texto;
+  @Input() valor;
 
   constructor(public validacao: ValidarCamposService,
               private readonly changeDetectorRef: ChangeDetectorRef) {

@@ -6,6 +6,7 @@
                 [disabled]="isDisabled"
                 (valueChange)="ngChange(pai)"
                 [id]="controlName"
+                [value]="valor"
                 [multiple]="isMultiple">
       <mat-option *ngFor="let opcao of opcoes"
         [value]="opcao.id">{{opcao.descricao}}

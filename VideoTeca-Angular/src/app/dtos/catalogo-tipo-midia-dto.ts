@@ -1,6 +1,7 @@
-export class CatalogoTipoMidia{
+export class CatalogoTipoMidiaDto{
   id: number;
   idCatalogo: number;
+  descricao: string;
   idTipoMidia: number;
   qtdTitulo: number;
 }

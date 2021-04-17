@@ -53,7 +53,7 @@
         <!-- Midia Column -->
         <ng-container matColumnDef="tipomidia">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 60%"> TIPO MIDIA </th>
-          <td mat-cell *matCellDef="let row" style="width: 60%"> {{row.desTipoMidia}} </td>
+          <td mat-cell *matCellDef="let row" style="width: 60%"> {{row.descricao}} </td>
         </ng-container>
     
         <!-- Quantidade Column -->
@@ -67,11 +67,11 @@
           <th mat-header-cell *matHeaderCellDef style="width: 20%;text-align: center;"> Ações </th>
           <td mat-cell *matCellDef="let row"  style="width: 20%;text-align: center;" > 
             <div class="btn-group">
-              <button mat-mini-fab color="primary" title="Editar" (click)="editar(row.id)">
+              <button mat-mini-fab color="primary" title="Editar" (click)="editarMidia(row)">
                 <mat-icon>edit</mat-icon>
               </button>
               &nbsp;
-              <button mat-mini-fab color="primary" title="Excluir" (click)="excluir(row.id)">
+              <button mat-mini-fab color="primary" title="Excluir" (click)="excluirMidia(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -96,6 +96,6 @@
 <app-modal [title]="''" [width]="'800px'" #modalCatalogoTipoMidia>
   <ng-container *ngIf="getVisibleCatalogoDetalhe == true">
     <app-catalogo-tipo-midia (itemDestino)="receber($event)"
-        [item]="this.catalogoTipoMidia" [modalParent]="this.pai"></app-catalogo-tipo-midia>
+        [modalParent]="this.pai"></app-catalogo-tipo-midia>
    </ng-container>
 </app-modal>

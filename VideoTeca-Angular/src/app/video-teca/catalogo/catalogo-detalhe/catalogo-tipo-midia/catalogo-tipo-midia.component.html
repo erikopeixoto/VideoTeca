@@ -1,12 +1,12 @@
 <form autocomplete="off" novalidate [formGroup]="formTipoMidia" #form>
   <fieldset class="scheduler-border">
-    <legend *ngIf="this.tipoMidia != null" class="scheduler-border">Código: {{this.catalogoTipoMidia.id}}</legend>
+    <legend *ngIf="this.catalogoTipoMidiaDto != null" class="scheduler-border">Código: {{this.catalogoTipoMidiaDto.id}}</legend>
     <div class="form-group container-fluid" 
       style="text-align: center;padding: 00 10%;margin-top: 1%">
       <div class="row">
         <div class="col-sm">
-          <app-input-select titulo="Tipo Midia *" [opcoes]="tipoMidias" controlName="tipoMidia"
-                        [formGroup]="formTipoMidia" [pai]="this.pai" style="width: 450px" #DesTipoMidia>
+          <app-input-select titulo="Tipo Midia *" [opcoes]="tipoMidias" controlName="idTipoMidia"
+                        [formGroup]="formTipoMidia" [pai]="this.pai" style="width: 450px" #IdTipoMidia>
           </app-input-select>
         </div>
         <div class="col-sm">

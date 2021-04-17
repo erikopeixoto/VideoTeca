@@ -1,4 +1,5 @@
 import { CatalogoTipoMidia } from './catalogo-tipo-midia';
+import { CatalogoTipoMidiaDto } from './../dtos/catalogo-tipo-midia-dto';
 export class Catalogo{
   id: number;
   idGenero: number;
@@ -8,4 +9,5 @@ export class Catalogo{
   codigo: string;
 
   catalogoTipoMidias: CatalogoTipoMidia[];
+  catalogoTipoMidiasDto: CatalogoTipoMidiaDto[];
 }

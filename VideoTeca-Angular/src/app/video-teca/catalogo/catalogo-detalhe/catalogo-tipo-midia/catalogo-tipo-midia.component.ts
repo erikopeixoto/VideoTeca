@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Util } from '../../../../utils/util';
 import { MaskManager } from '../../../../utils/mask-manager';
 import { CatalogoTipoMidia } from '../../../../modelos/catalogo-tipo-midia';
+import { CatalogoTipoMidiaDto } from '../../../../dtos/catalogo-tipo-midia-dto';
+import { CatalogoService } from '../../../../servicos/catalogo.service';
 import { TipoMidiaService } from '../../../../servicos/tipo-midia.service';
 import { TipoMidia } from '../../../../modelos/tipo-midia';
 import { AlertaComponent } from '../../../../shared/components/alerta/alerta.component';
@@ -22,57 +24,67 @@ import { InputSelectComponent } from '../../../../shared/components/campos/input
 })
 export class CatalogoTipoMidiaComponent implements OnInit {
   @Input() modalParent: any;
-  @Input() item: any;
   @Output() itemDestino = new EventEmitter();
 
-  @ViewChild('DesTipoMidia', {static: true}) desTipoMidia: InputSelectComponent;
+  @ViewChild('IdTipoMidia', {static: true}) idTipoMidia: InputSelectComponent;
 
   public id: number;
   public formTipoMidia: FormGroup;
   public operacao: string;
   public maskManager: MaskManager;
   public pai: CatalogoTipoMidiaComponent;
-  public catalogoTipoMidia: CatalogoTipoMidia;
-  public tipoMidia: TipoMidia;
+  public catalogoTipoMidiaDto: CatalogoTipoMidiaDto;
+  public qtdTitulo: number;
   public tipoMidias: TipoMidia[];
 
   constructor(
+    private catalogoService: CatalogoService,
     private tipoMidiaService: TipoMidiaService,
     public fb: FormBuilder,
     public dialog: MatDialog,
   ) {
       this.pai = this;
+      this.tipoMidiaService.listar().then((lista) => {
+        if (lista.length > 0) {
+          lista.sort((a, b) => Util.ordenacao(a , b, 'descricao'));
+          this.tipoMidias = lista;
+        }
+      });      
   }
 
   ngOnInit(): void {
     this.formTipoMidia = this.fb.group({
-      tipoMidia: ['', Validators.required],
-      qtdTitulo: [0 , [Validators.required, Validators.min(1)]],
-      id: []
+      idTipoMidia: ['', Validators.required],
+      qtdTitulo: [null, [Validators.required, Validators.min(1)]],
+      idCatalogo: [],
+      id: [],
+      descricao: []
     });
-    this.catalogoTipoMidia = this.item;
+    this.catalogoTipoMidiaDto = this.catalogoService.catalogoTipoMidiaDto;
+    this.idTipoMidia.isDisabled = false;
+
+
   }
 
   ngAfterViewInit(): void {
-    this.tipoMidiaService.listar().then((lista) => {
-      if (lista.length > 0) {
-        lista.sort((a, b) => Util.ordenacao(a , b, 'descricao'));
-        this.tipoMidias = lista;
-      }
-    });
-
-    if (! Util.isNullOrEmpty(this.catalogoTipoMidia)) {
+    if (! Util.isNullOrEmpty(this.catalogoTipoMidiaDto)) {
       this.operacao = 'Confirma a alteração?';
-      this.id = this.catalogoTipoMidia.id;
+      this.id = this.catalogoTipoMidiaDto.id;
       this.carregar();
     } else {
       this.operacao = 'Confirma a inclusão?';
     }    
   }
-
-  carregar(): void {
-    this.formTipoMidia.setValue(this.catalogoTipoMidia); 
-  }
+  
+  async carregar(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.idTipoMidia.isDisabled = true;
+      this.formTipoMidia.setValue(this.catalogoTipoMidiaDto); 
+      this.idTipoMidia.valor = this.catalogoTipoMidiaDto.idTipoMidia;
+      this.idTipoMidia.update();
+      this.formTipoMidia.updateValueAndValidity();
+    });
+   }
 
   enviar(): void {
     if (this.formTipoMidia.valid) {
@@ -93,6 +105,7 @@ export class CatalogoTipoMidiaComponent implements OnInit {
            } else {
             this.alterar();
           }
+          this.modalParent.modalCatalogoTipoMidia.closeModal();
         }
       });
     }
@@ -101,21 +114,25 @@ export class CatalogoTipoMidiaComponent implements OnInit {
   incluir(): void {
     if (this.formTipoMidia.valid) {
       const data = this.modalParent.dataSource.data;
-      data.push({id: 0, idTipoMidia: this.formTipoMidia.controls['tipoMidia'].value,
-        desTipoMidia: document.getElementById('tipoMidia').innerText.replace('\t', ''),
+      data.push({id: 0, idTipoMidia: this.formTipoMidia.controls['idTipoMidia'].value,
+        descricao: document.getElementById('idTipoMidia').innerText.replace('\t', ''),
         qtdTitulo: this.formTipoMidia.controls['qtdTitulo'].value,
         idCatalogo: this.modalParent.formCatalogo.controls['id'].value});
       this.modalParent.dataSource.data = data;
     }
-    this.modalParent.modalCatalogoTipoMidia.closeModal();
   }
 
   alterar(): void {
-    this.tipoMidia = this.formTipoMidia.getRawValue() as TipoMidia;
-    this.tipoMidiaService.alterar(this.tipoMidia).then(() => {
-      this.modalParent.pesquisar();
-      this.modalParent.modalCatalogoTipoMidia.closeModal();
-    });
+    const data = this.modalParent.dataSource.data;
+    let itemNovo = {id: this.catalogoService.catalogoTipoMidiaDto.id, 
+                    idTipoMidia: this.catalogoService.catalogoTipoMidiaDto.idTipoMidia,
+                    descricao: document.getElementById('idTipoMidia').innerText.replace('\t', ''),
+                    qtdTitulo: this.formTipoMidia.controls['qtdTitulo'].value,
+                    idCatalogo: this.catalogoService.catalogoTipoMidiaDto.idCatalogo};
+
+    let itemIndex = data.findIndex(item => item.id == this.catalogoService.catalogoTipoMidiaDto.id);
+    data[itemIndex] = itemNovo;
+    this.modalParent.dataSource.data = data;
   }
 
   fechar(): void {

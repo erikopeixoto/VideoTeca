@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Catalogo } from '../modelos/catalogo';
+import { CatalogoTipoMidiaDto} from '../dtos/catalogo-tipo-midia-dto';
 import { BaseService } from './base.service';
 import { GenericHttpService } from './generic.service';
 import { CatalogoDto } from '../dtos/catalogo-dto';
@@ -12,6 +13,7 @@ export class CatalogoService extends BaseService{
   public catalogo: Catalogo = null;
   public cargaDados: boolean;
   public id: number;
+  public catalogoTipoMidiaDto: CatalogoTipoMidiaDto;
 
   constructor(
     private readonly servicoHttpGenerico: GenericHttpService<Catalogo, CatalogoDto>,

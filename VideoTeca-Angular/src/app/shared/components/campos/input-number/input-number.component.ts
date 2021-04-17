@@ -17,9 +17,13 @@ export class InputNumberComponent {
   @Input() step = 1;
   @Input() class: string;
   @Input() style: string;
+  @Input() isDisabled: boolean;
   @Input() pai;
 
-  constructor(public validacao: ValidarCamposService) { }
+  constructor(public validacao: ValidarCamposService) { 
+    this.isDisabled = false;
+  
+  }
 
   get formControl(): AbstractControl {
     return this.formGroup.controls[this.controlName];
