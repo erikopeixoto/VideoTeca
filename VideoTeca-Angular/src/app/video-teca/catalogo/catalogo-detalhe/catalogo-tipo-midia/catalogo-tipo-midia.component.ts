@@ -44,12 +44,6 @@ export class CatalogoTipoMidiaComponent implements OnInit {
     public dialog: MatDialog,
   ) {
       this.pai = this;
-      this.tipoMidiaService.listar().then((lista) => {
-        if (lista.length > 0) {
-          lista.sort((a, b) => Util.ordenacao(a , b, 'descricao'));
-          this.tipoMidias = lista;
-        }
-      });      
   }
 
   ngOnInit(): void {
@@ -62,28 +56,39 @@ export class CatalogoTipoMidiaComponent implements OnInit {
     });
     this.catalogoTipoMidiaDto = this.catalogoService.catalogoTipoMidiaDto;
     this.idTipoMidia.isDisabled = false;
-
-
   }
 
   ngAfterViewInit(): void {
     if (! Util.isNullOrEmpty(this.catalogoTipoMidiaDto)) {
       this.operacao = 'Confirma a alteração?';
       this.id = this.catalogoTipoMidiaDto.id;
-      this.carregar();
+      this.carregarCombos().then(() => {
+        this.carregar();
+      })
     } else {
+      this.carregarCombos();
       this.operacao = 'Confirma a inclusão?';
     }    
   }
   
-  async carregar(): Promise<boolean> {
+  async carregarCombos(): Promise<boolean> {
     return new Promise((resolve) => {
+      this.tipoMidiaService.listar().then((lista) => {
+        if (lista.length > 0) {
+          lista.sort((a, b) => Util.ordenacao(a , b, 'descricao'));
+          this.tipoMidias = lista;
+          resolve(true);
+        }
+      });      
+    });
+  }
+  carregar(): void {
       this.idTipoMidia.isDisabled = true;
       this.formTipoMidia.setValue(this.catalogoTipoMidiaDto); 
       this.idTipoMidia.valor = this.catalogoTipoMidiaDto.idTipoMidia;
       this.idTipoMidia.update();
       this.formTipoMidia.updateValueAndValidity();
-    });
+
    }
 
   enviar(): void {

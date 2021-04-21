@@ -34,6 +34,10 @@ speed-measure-plugin*.json
 .settings/
 *.sublime-workspace
 
+# SQL Server files
+*.mdf
+*.ldf
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

@@ -11,9 +11,9 @@
     [des_bairro] VARCHAR(50) NULL, 
     [des_logradouro] VARCHAR(100) NULL, 
     [num_endereco] VARCHAR(10) NULL, 
-    [des_complemento] VARCHAR(50) NULL
-	[dtc_nascimento] DATETIME NULL,
-	[dtc_atualizacao] DATETIME DEFAULT GETDATE()
+    [des_complemento] VARCHAR(50) NULL,
+    [dtc_nascimento] DATETIME NULL,
+    [dtc_atualizacao] DATETIME DEFAULT GETDATE()
 )
 
 ALTER TABLE [dbo].[Cliente]
