@@ -24,7 +24,7 @@ namespace VideoTeca.AcessoDados.Map
             builder.Property(t => t.DtcNascimento).HasColumnName("dtc_nascimento").IsRequired(false);
             builder.Property(t => t.DtcAtualizacao).HasColumnName("dtc_atualizacao").IsRequired(false);
 
-            builder.Ignore(t => t.Catalogos);
+            builder.Ignore(t => t.ClienteCatalogoTipoMidias);
 
             //builder.HasOne(c => c.FoneTipo)
             //       .WithMany(c => c.VideoTecas)

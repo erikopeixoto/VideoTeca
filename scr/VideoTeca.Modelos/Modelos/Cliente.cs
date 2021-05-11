@@ -23,6 +23,6 @@ namespace VideoTeca.Modelos.Modelos
         public DateTime? DtcNascimento { get; set; }
         public DateTime? DtcAtualizacao { get; set; }
 
-        public ICollection<Catalogo> Catalogos { get; set; }
+        public ICollection<ClienteCatalogoTipoMidia> ClienteCatalogoTipoMidias { get; set; }
     }
 }

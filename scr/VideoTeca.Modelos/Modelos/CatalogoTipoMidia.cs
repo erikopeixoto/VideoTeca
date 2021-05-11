@@ -18,5 +18,6 @@ namespace VideoTeca.Modelos.Modelos
         public Catalogo Catalogo { get; set; }
         [ForeignKey("IdTipoMidia")]
         public TipoMidia TipoMidia { get; set; }
+        public List<ClienteCatalogoTipoMidia> ClienteCatalogoTipoMidias { get; set; }
     }
 }
