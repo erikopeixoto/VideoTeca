@@ -1,0 +1,32 @@
+import { Component, Input } from '@angular/core';
+import { FormGroup, AbstractControl } from '@angular/forms';
+import { ValidarCamposService } from '../validar-campos.service';
+
+@Component({
+  selector: 'app-input-number',
+  templateUrl: './input-number.component.html',
+  styleUrls: ['./input-number.component.css']
+})
+export class InputNumberComponent {
+
+  @Input() titulo: string;
+  @Input() formGroup: FormGroup;
+  @Input() controlName: string;
+  @Input() minimo = 0;
+  @Input() maximo = 10;
+  @Input() step = 1;
+  @Input() class: string;
+  @Input() style: string;
+  @Input() isDisabled: boolean;
+  @Input() pai;
+
+  constructor(public validacao: ValidarCamposService) { 
+    this.isDisabled = false;
+  
+  }
+
+  get formControl(): AbstractControl {
+    return this.formGroup.controls[this.controlName];
+  }
+
+}

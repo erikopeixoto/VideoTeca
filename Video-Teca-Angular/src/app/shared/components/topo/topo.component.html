@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" *ngIf="showMenu()">
+  <div class="container">
+    <span style="font-size: 18px;color:white">Vídeo-Teca</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <div *ngIf="loggedIn()" class="collapse navbar-collapse" id="nvInicial">
+      <button mat-button [matMenuTriggerFor]="menuCadastros">Cadastros</button>
+      <mat-menu #menuCadastros="matMenu">
+        <button routerLink="cliente" mat-menu-item>Cliente</button>
+        <button routerLink="genero" mat-menu-item>Gênero</button>
+        <button routerLink="tipoMidia" mat-menu-item>Tipo Mídia</button>
+      </mat-menu>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button mat-button routerLink="catalogo">Catalogo</button>
+    </div>
+
+    <!--
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div *ngIf="loggedIn()" class="collapse navbar-collapse" id="nvInicial">
+      <ul class="navbar-nav mr-auto" style="font-size: 16px;">
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="cliente">Clientes</a>
+        </li>
+      </ul>
+    </div>
+    -->
+  </div>
+</nav>

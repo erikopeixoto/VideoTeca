@@ -1,0 +1,108 @@
+<div class="container" id="grCatalogo">
+  <h4>Catalogo</h4>
+  <form autocomplete="off" novalidate [formGroup]="filtroListagem">
+    <fieldset class="scheduler-border">
+      <legend *ngIf="this.catalogo != null" class="scheduler-border">Filtro</legend>
+      <div class="d-flex">
+        <div style="width: 100%;">
+          <div class="row" style="margin-left: 1%;">
+            <div>
+              <app-input-text titulo="Título" controlName="titulo"
+                              [formGroup]="filtroListagem" style="width: 300px">
+              </app-input-text>
+            </div>
+            <div style="margin-left: 1%;">
+              <app-input-text titulo="Autor/Diretor" controlName="nomeAutor" maskTexto=""
+                            [formGroup]="filtroListagem" style="width: 300px;" [pai]="this.parente"></app-input-text>
+            </div>
+            <div style="margin-left: 1%;">
+              <app-input-select titulo="Gênero" [opcoes]="generos" controlName="idGenero"
+                            [formGroup]="filtroListagem" [pai]="this.parente" style="width: 300px"></app-input-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="row">
+      <div style="margin-left: 1%;">
+        <button class="btn btn-outline-primary" (click)="incluir()">
+          <i class="fa fa-plus-circle"></i>&nbsp;
+          Novo Titulo
+        </button>
+      </div>
+      <div>
+        <button style="position: absolute; right: 11%;" class="btn btn-outline-primary" (click)="pesquisar()">
+          <i class="fa fa-search"></i>&nbsp;
+          Pesquisar
+        </button>
+      </div>
+    </div>
+
+  </form>
+  <br>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Nome Column -->
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%"> TÍTULO </th>
+        <td mat-cell *matCellDef="let row" style="width: 30%"> {{row.desTitulo}} </td>
+      </ng-container>
+
+      <!-- Munic�pio Column -->
+      <ng-container matColumnDef="autor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%"> AUTOR/DIRETOR </th>
+        <td mat-cell *matCellDef="let row" style="width: 30%"> {{row.nomAutor}} </td>
+      </ng-container>
+
+      <!-- Telefone Column -->
+      <ng-container matColumnDef="genero">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%"> GÊNERO </th>
+        <td mat-cell *matCellDef="let row" style="width: 20%"> {{row.desGenero}} </td>
+      </ng-container>
+
+      <!-- CPF/CNPJ Column -->
+      <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%"> CÓDIGO </th>
+        <td mat-cell  *matCellDef="let row" style="width: 15%"> {{row.codigo}} </td>
+      </ng-container>
+
+      <!-- A��es -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%;text-align: center;"> Ações </th>
+        <td mat-cell *matCellDef="let row"  style="width: 15%;text-align: center;" >
+          <div class="btn-group">
+            <button mat-mini-fab color="primary" title="Editar" (click)="editar(row.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            &nbsp;
+            <button mat-mini-fab color="primary" title="Excluir" (click)="excluir(row.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Sem dados
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4"> Catalogos não encontrados para esse filtro: "{{NomeCatalogo.value}}"</td>
+      </tr>
+       -->
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>
+
+<app-modal [title]="''" [width]="'950px'" #modalDetalheCatalogo>
+  <ng-container *ngIf="getVisibleCatalogoDetalhe == true">
+    <app-catalogo-detalhe (itemDestino)="receber($event)"
+        [item]="this.catalogo" [modalParent]="this.parente"></app-catalogo-detalhe>
+   </ng-container>
+</app-modal>
+

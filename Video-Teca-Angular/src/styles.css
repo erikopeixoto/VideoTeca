@@ -1,0 +1,79 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+@import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
+@import '../node_modules/bootswatch/dist/lumen/bootstrap.min.css';
+
+@import '../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+#toast-container > div {
+    opacity:1;
+}
+
+fieldset{
+  border: 2px solid rgb(107, 107, 107);
+}
+
+form{
+  line-height: 1!important;
+}
+
+legend{
+  border: 0;
+}
+
+fieldset.scheduler-border {
+  border: 1px groove #ddd !important;
+  padding: 0px !important;
+  margin: 0 0 1.5em 0 !important;
+  -webkit-box-shadow:  0px 0px 0px 0px #000;
+          box-shadow:  0px 0px 0px 0px #000;
+  margin-top: 5px !important;
+  border-radius: 3.5px;
+}
+
+legend.scheduler-border {
+  font-size: 1.2em !important;
+  text-align: left !important;
+  width: auto;
+  padding: 0 10px;
+  border-bottom: none;
+  margin-left: 20px;
+  text-align: center;
+}
+
+mat-form-field {
+  font-size: 12px!important;
+  line-height: 0.9!important;
+  margin-bottom: 0.1%!important;
+}
+
+input.mat-input-element {
+  height: 10px!important;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+th {
+  background-color:lightsteelblue;
+  font-weight: bold!important;
+}
+
+button.mat-button {
+  background-color:lightsteelblue;
+ 
+}
+
+.disabilitar{
+  display: block;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+.habilitar{
+  display: block;
+  visibility: inline;
+}

@@ -1,0 +1,56 @@
+<div class="container" id="grCliente">
+  <h4>Genero</h4>
+    <div>
+      <button class="btn btn-outline-primary" (click)="incluir()">
+        <i class="fa fa-plus-circle"></i>&nbsp;
+        Novo Gênero
+      </button>
+    </div>
+  <br>
+
+  <div class="mat-elevation-z8" style="width: 70%!important">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%"> ID </th>
+        <td mat-cell *matCellDef="let row" style="width: 20%" > {{row.id}} </td>
+      </ng-container>
+
+      <!-- Descricao Column -->
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 70%"> DESCRIÇÃO </th>
+        <td mat-cell *matCellDef="let row" style="width: 70%"> {{row.descricao}} </td>
+      </ng-container>
+
+      <!-- A��es -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef style="width: 20%;text-align: center;"> Ações </th>
+        <td mat-cell *matCellDef="let row"  style="width: 20%;text-align: center;" >
+          <div class="btn-group">
+            <button mat-mini-fab color="primary" title="Editar" (click)="editar(row.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            &nbsp;
+            <button mat-mini-fab color="primary" title="Excluir" (click)="excluir(row.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>
+
+<app-modal [title]="''" [width]="'700px'" #modalDetalheGenero>
+  <ng-container *ngIf="getVisibleGeneroDetalhe == true">
+    <app-genero-detalhe (itemDestino)="receber($event)"
+        [item]="this.genero" [modalParent]="this.parente"></app-genero-detalhe>
+   </ng-container>
+</app-modal>
+

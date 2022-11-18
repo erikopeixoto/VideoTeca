@@ -1,0 +1,62 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
+
+# dependencies
+VideoTeca-Angular/node_modules
+scr/VideoTeca.AcessoDados/bin
+scr/VideoTeca.AcessoDados/obj
+scr/VideoTeca.Modelos/bin
+scr/VideoTeca.Modelos/obj
+scr/VideoTeca.Servicos/bin
+scr/VideoTeca.Servicos/obj
+scr/VideoTeca.WebApi/bin
+scr/VideoTeca.WebApi/obj
+
+test/VideoTeca.Tests/obj
+test/VideoTeca.Tests/bin
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# SQL Server files
+#*.mdf
+#*.ldf
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+VideoTeca-Angular/package-lock.json

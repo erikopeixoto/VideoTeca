@@ -1,0 +1,101 @@
+<form autocomplete="off" novalidate [formGroup]="formCatalogo">
+  <fieldset class="scheduler-border">
+    <legend *ngIf="this.catalogo != null" class="scheduler-border">Código: {{this.catalogo.id}}</legend>
+    <div class="form-group container-fluid"
+      style="text-align: center;padding: 00 10%;margin-top: 1%">
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Número *" controlName="codigo"  maxLength="5"
+                        [formGroup]="formCatalogo" style="width: 150px;" [pai]="this.pai"></app-input-text>
+        </div>
+        <div class="col-sm">
+          <app-input-select titulo="Genero *" [opcoes]="this.modalParent.generos" controlName="idGenero"
+                        [formGroup]="formCatalogo" [pai]="this.pai" style="width: 450px"></app-input-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Ano Lançamento *" controlName="anoLancamento" [formGroup]="formCatalogo" maxLength="4"
+                          style="width: 150px" maskTexto="0000"></app-input-text>
+        </div>
+        <div class="col-sm">
+          <app-input-text titulo="Autor" controlName="nomAutor" [formGroup]="formCatalogo"
+                          style="width: 450px"></app-input-text>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Titulo *" controlName="desTitulo"
+                        [formGroup]="formCatalogo"
+                        style="width: 630px" [pai]="this.pai"></app-input-text>
+        </div>
+      </div>
+      <div class="row">
+        <div style="margin-left: 2%;">
+          <button class="btn btn-outline-primary" (click)="incluirMidia()">
+            <i class="fa fa-plus-circle"></i>&nbsp;
+            Nova Mídia
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8" style="margin-left: 5%;margin-right: 5%;margin-bottom: 5%;">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Identificador Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%"> ID </th>
+          <td mat-cell *matCellDef="let row" style="width: 20%"> {{row.id}} </td>
+        </ng-container>
+        <!-- Midia Column -->
+        <ng-container matColumnDef="tipomidia">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 60%"> TIPO MÍDIA </th>
+          <td mat-cell *matCellDef="let row" style="width: 60%"> {{row.descricao}} </td>
+        </ng-container>
+
+        <!-- Quantidade Column -->
+        <ng-container matColumnDef="quantidade">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%"> QUANTIDADE </th>
+          <td mat-cell *matCellDef="let row" style="width: 20%"> {{row.qtdTitulo}} </td>
+        </ng-container>
+
+        <!-- A��es -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef style="width: 20%;text-align: center;"> Ações </th>
+          <td mat-cell *matCellDef="let row"  style="width: 20%;text-align: center;" >
+            <div class="btn-group">
+              <button mat-mini-fab color="primary" title="Editar" (click)="editarMidia(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              &nbsp;
+              <button mat-mini-fab color="primary" title="Excluir" (click)="excluirMidia(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+
+  </fieldset>
+
+  <mat-card-actions>
+    <button type="button" [disabled]="this.formCatalogo.invalid" color="accent" mat-raised-button (click)="enviar()">Salvar</button>
+    &nbsp;&nbsp;
+    <button style="padding-left: 10px;" type="button" color="warn" mat-raised-button (click)="fechar()">Cancelar</button>
+  </mat-card-actions>
+</form>
+
+<app-modal [title]="''" [width]="'800px'" #modalCatalogoTipoMidia>
+  <ng-container *ngIf="getVisibleCatalogoDetalhe == true">
+    <app-catalogo-tipo-midia (itemDestino)="receber($event)"
+        [modalParent]="this.pai"></app-catalogo-tipo-midia>
+   </ng-container>
+</app-modal>

@@ -1,0 +1,26 @@
+<div [formGroup]="formGroup">
+  <mat-form-field class="full-width" [ngClass]="(isDisabled)?'disabilitar':'habilitar'" [style]="style"
+      appearance="outline">
+      <mat-label>{{titulo}}</mat-label>
+      <input  matInput
+              [mask]="maskTexto"
+              [class]="class"
+              [placeholder]="titulo"
+              [name]="controlName"
+              [maxlength]="maxLength"
+              [formControlName]="controlName"
+              [readonly]="isDisabled"
+              id="controlName">
+    <!--(blur)="ngBlur(pai)" -->
+
+    <mat-error *ngIf="validacao.hasErrorValidar(formControl, 'required')">Campo obrigatório</mat-error>
+    <mat-error *ngIf="validacao.hasErrorValidar(formControl, 'minlength')">
+      {{titulo}} precisa ter no mínimo {{validacao.lengthValidar(formControl, 'minlength')}} caracteres</mat-error>
+    <mat-error *ngIf="validacao.hasErrorValidar(formControl, 'maxlength')">
+      {{titulo}} pode ter no máximo {{validacao.lengthValidar(formControl, 'maxlength')}} caracteres
+    </mat-error>
+    <mat-error *ngIf="validacao.hasErrorValidar(formControl, 'cnpjcpfInvalido')">
+      CPF/CNPJ inválido.</mat-error>
+  </mat-form-field>
+</div>
+

@@ -1,0 +1,164 @@
+<div class="container" id="grCliente">
+  <h4>Cliente</h4>
+  <form autocomplete="off" novalidate [formGroup]="filtroListagem">
+    <fieldset class="scheduler-border">
+      <legend *ngIf="this.cliente != null" class="scheduler-border">Filtro</legend>
+      <div class="d-flex">
+        <div style="width: 100%;">
+          <div class="row" style="margin-left: 1%;">
+            <div>
+              <app-input-text titulo="Nome" controlName="nomeCliente"
+                              [formGroup]="filtroListagem" style="width: 450px" #NomeCliente>
+              </app-input-text>
+            </div>
+            <div style="margin-left: 1%;">
+              <app-input-select titulo="Tipo Pessoa" [opcoes]="tipoPessoas" controlName="codTipoPessoa"
+                            [formGroup]="filtroListagem" [ngChange]= "alterarMascara()"
+                            [pai]="this.parente" style="width: 200px"></app-input-select>
+            </div>
+            <div style="margin-left: 1%;">
+              <app-input-text titulo="" controlName="numDocumento" maskTexto=""
+                            [formGroup]="filtroListagem" style="width: 250px;" [pai]="this.parente" #NumDoc></app-input-text>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="row">
+      <div style="margin-left: 1%;">
+        <button class="btn btn-outline-primary" (click)="incluir()">
+          <i class="fa fa-plus-circle"></i>&nbsp;
+          Novo Cliente
+        </button>
+      </div>
+      <div>
+        <button style="position: absolute; right: 11%;" class="btn btn-outline-primary" (click)="pesquisar()">
+          <i class="fa fa-search"></i>&nbsp;
+          Pesquisar
+        </button>
+      </div>
+    </div>
+
+  </form>
+  <br>
+  <!--
+  <table class="table table-striped">
+    <thead class="thead-light" align="center">
+      <tr>
+        <th style="width: 50px;">#</th>
+        <th style="width: 300px;" align="left">Nome</th>
+        <th style="width: 250px;">Munic�pio</th>
+        <th style="width: 150px;">Fone</th>
+        <th style="width: 150px;">Documento</th>
+        <th style="width: 150px;" colspan="2">Ações</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="clienteFiltrados && clienteFiltrados.length > 0" align="center">
+      <tr *ngFor="let Cliente of clienteFiltrados">
+        <td style="width: 50px;">{{Cliente.id}}</td>
+        <td align="left">{{Cliente.nomCliente}}</td>
+        <td>{{Cliente.desMunicipio}}</td>
+        <td>{{Cliente.foneFormatado}}</td>
+        <td>{{Cliente.numDocumentoFormatado}}</td>
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-success" title="Editar" (click)="editar(Cliente)">
+              <i class="fa fa-edit"></i>
+            </button>
+            &nbsp;
+            <button class="btn btn-sm btn-danger" title="Excluir" (click)="excluir(Cliente)">
+              <i class="fa fa-eraser"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="!stsCliente">
+      <tr>
+        <td colspan="7" class="text-center">
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  -->
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Nome Column -->
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%"> NOME </th>
+        <td mat-cell *matCellDef="let row" style="width: 30%"> {{row.nomCliente}} </td>
+      </ng-container>
+
+      <!-- Munic�pio Column -->
+      <ng-container matColumnDef="municipio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%"> MUNICÍPIO </th>
+        <td mat-cell *matCellDef="let row" style="width: 25%"> {{row.desMunicipio}} </td>
+      </ng-container>
+
+      <!-- Telefone Column -->
+      <ng-container matColumnDef="telefone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%"> TELEFONE </th>
+        <td mat-cell *matCellDef="let row" style="width: 15%"> {{row.foneFormatado}} </td>
+      </ng-container>
+
+      <!-- CPF/CNPJ Column -->
+      <ng-container matColumnDef="cpfcnpj">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%"> CPF/CNPJ </th>
+        <td mat-cell  *matCellDef="let row" style="width: 15%"> {{row.numDocumentoFormatado}} </td>
+      </ng-container>
+
+      <!-- A��es -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%;text-align: center;"> Ações </th>
+        <td mat-cell *matCellDef="let row"  style="width: 15%;text-align: center;" >
+          <div class="btn-group">
+            <button mat-mini-fab color="primary" title="Locar" (click)="locar(row.id)">
+              <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+            &nbsp;
+            <button mat-mini-fab color="primary" title="Editar" (click)="editar(row.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            &nbsp;
+            <button mat-mini-fab color="primary" title="Excluir" (click)="excluir(row.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%"> ID </th>
+        <td mat-cell *matCellDef="let row" style="width: 10%" > {{row.id}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Sem dados
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4"> Clientes n�o encontrados para esse filtro: "{{NomeCliente.value}}"</td>
+      </tr>
+       -->
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>
+
+<app-modal [title]="''" [width]="'800px'" #modalDetalheCliente>
+  <ng-container *ngIf="getVisibleClienteDetalhe == true">
+    <app-cliente-detalhe (itemDestino)="receber($event)"
+        [item]="this.cliente" [modalParent]="this.parente"></app-cliente-detalhe>
+  </ng-container>
+</app-modal>
+
+<app-modal [title]="''" [width]="'1000px'" [height]="'500px'" #modalLocacaoCliente>
+  <ng-container *ngIf="getVisibleClienteLocacao == true">
+    <app-cliente-locacao (itemDestino)="receber($event)"
+        [item]="this.cliente" [modalParent]="this.parente"></app-cliente-locacao>
+  </ng-container>
+</app-modal>

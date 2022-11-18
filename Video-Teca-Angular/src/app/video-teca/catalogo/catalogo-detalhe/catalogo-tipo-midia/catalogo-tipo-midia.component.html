@@ -1,0 +1,27 @@
+<form autocomplete="off" novalidate [formGroup]="formTipoMidia" #form>
+  <fieldset class="scheduler-border">
+    <legend *ngIf="this.catalogoTipoMidiaDto != null" class="scheduler-border">Código: {{this.catalogoTipoMidiaDto.id}}</legend>
+    <div class="form-group container-fluid"
+      style="text-align: center;padding: 00 10%;margin-top: 1%">
+      <div class="row">
+        <div class="col-sm">
+          <app-input-select titulo="Tipo Midia *" [opcoes]="tipoMidias" controlName="idTipoMidia"
+                        [formGroup]="formTipoMidia" [pai]="this.pai" style="width: 450px" #IdTipoMidia>
+          </app-input-select>
+        </div>
+        <div class="col-sm">
+          <app-input-number titulo="Quantidade *" controlName="qtdTitulo"
+                        [formGroup]="formTipoMidia" [pai]="this.pai" style="width: 450px"></app-input-number>
+        </div>
+
+      </div>
+    </div>
+  </fieldset>
+
+  <mat-card-actions>
+    <button type="button" [disabled]="this.formTipoMidia.invalid" color="accent" mat-raised-button (click)="enviar()">Salvar</button>
+    &nbsp;&nbsp;
+    <button style="padding-left: 10px;" type="button" color="warn" mat-raised-button (click)="fechar()">Cancelar</button>
+  </mat-card-actions>
+
+</form>

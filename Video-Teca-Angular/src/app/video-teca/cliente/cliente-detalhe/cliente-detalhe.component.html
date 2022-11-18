@@ -1,0 +1,75 @@
+<form autocomplete="off" novalidate [formGroup]="formCliente">
+  <fieldset class="scheduler-border">
+    <legend *ngIf="this.cliente != null" class="scheduler-border">Código: {{this.cliente.id}}</legend>
+    <div class="form-group container-fluid"
+      style="text-align: center;padding: 00 10%;margin-top: 1%">
+      <div class="row">
+        <div class="col-sm">
+          <app-input-select titulo="Tipo Pessoa *" [opcoes]="tipoPessoas" controlName="tipoPessoa"
+                        [formGroup]="formCliente" [ngChange]= "alterarMascara()"
+                        [pai]="this.pai" style="width: 300px"></app-input-select>
+        </div>
+        <div class="col-sm">
+          <app-input-text titulo="Documento *" controlName="numDocumento" maskTexto="000.000.000-00"
+                        [formGroup]="formCliente" style="width: 300px;" [pai]="this.pai" #NumDoc></app-input-text>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Nome *" controlName="nomCliente" [formGroup]="formCliente" maxLength="50"
+                          style="width: 370px" #NomCliente></app-input-text>
+        </div>
+        <div *ngIf="this.formCliente.controls['tipoPessoa'].value === 1" class="col-sm">
+          <app-input-date titulo="Data Nascimento" controlName="dtcNascimento" [formGroup]="formCliente"
+                          style="width: 100px"></app-input-date>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="CEP *" controlName="numCep" maskTexto="00000-000"
+                        [formGroup]="formCliente"
+                        style="width: 150px" [pai]="this.pai" #NumCep></app-input-text>
+        </div>
+        <div class="col-sm">
+          <app-input-text titulo="Município *" controlName="desMunicipio" maxLength="50"
+                        [formGroup]="formCliente" style="width: 450px"></app-input-text>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Celular *" controlName="numTelefone" [formGroup]="formCliente"
+                        style="width: 150px;" maskTexto="(00)00000-0000"></app-input-text>
+        </div>
+        <div class="col-sm">
+          <app-input-text titulo="Bairro *" controlName="desBairro" maxLength="50"
+                        [formGroup]="formCliente" style="width: 450px"></app-input-text>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Logradouro *" controlName="desLogradouro" [formGroup]="formCliente"
+                        maxLength="100"  style="width: 630px"></app-input-text>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <app-input-text titulo="Número *" controlName="numEndereco" [formGroup]="formCliente"
+                        style="width: 150px"></app-input-text>
+        </div>
+        <div class="col-sm">
+          <app-input-text titulo="Complemento" controlName="desComplemento" maxLength="50"
+                        [formGroup]="formCliente" style="width: 450px"></app-input-text>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <mat-card-actions>
+    <button type="button" [disabled]="this.formCliente.invalid" color="accent" mat-raised-button (click)="enviar()">Salvar</button>
+    &nbsp;&nbsp;
+    <button style="padding-left: 10px;" type="button" color="warn" mat-raised-button (click)="fechar()">Cancelar</button>
+  </mat-card-actions>
+
+</form>
