@@ -27,9 +27,10 @@ namespace VideoTeca.WebApi
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            // .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                , ServiceLifetime.Singleton);
+                , ServiceLifetime.Scoped);
 
             services.AddScoped<ICatalogoInterface, CatalogoServico>();
             services.AddScoped<ICatalogoTipoMidiaInterface, CatalogoTipoMidiaServico>();

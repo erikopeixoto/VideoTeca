@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using VideoTeca.AcessoDados.Interfaces;
+using VideoTeca.Modelos.Modelos;
 
 namespace VideoTeca.AcessoDados.Repositorios
 {
@@ -42,8 +43,10 @@ namespace VideoTeca.AcessoDados.Repositorios
         {
             try
             {
-                _context.Update(entity);
+                //_context.Update(entity);
+                _context.Entry(entity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                //_context.Entry(entity).State = EntityState.Detached;
             }
             catch (Exception ex)
             {
