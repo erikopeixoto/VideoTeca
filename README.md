@@ -1,4 +1,4 @@
-# Pessoas Fone
+# Vídeo Teca
 
 ## Ambiente desenvolvimento
  - Angular 10 
@@ -19,3 +19,4 @@
  - Açoes futuras a executar
 ## Considerações Gerais
  - Estrutura de FrontEnd e BackEnd feita e acesso aos métodos da API funcionando corretamente.
+
